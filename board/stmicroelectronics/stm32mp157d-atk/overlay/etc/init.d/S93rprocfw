@@ -1,0 +1,51 @@
+#!/bin/sh
+# add new path for firmware parse for remote processor
+
+DEBUG=true
+NOTICE=true
+WARN=true
+ERR=true
+
+debug() {
+        if [ $DEBUG ]; then
+                logger -t ${logger_tag} -p user.debug $@
+        fi
+}
+
+notice() {
+        if [ $NOTICE ]; then
+                logger -t ${logger_tag} -p user.notice $@
+        fi
+}
+
+warn() {
+        if [ $WARN ]; then
+                logger -t ${logger_tag} -p user.warn $@
+        fi
+}
+
+err() {
+        if [ $ERR ]; then
+                logger -t ${logger_tag} -p user.err $@
+        fi
+}
+
+# logger tag
+logger_tag=$0
+
+start() {
+	echo -n "/vendor/firmware" > /sys/module/firmware_class/parameters/path
+}
+
+stop() {
+	echo -n "/lib/firmware" > /sys/module/firmware_class/parameters/path
+}
+
+case "$1" in
+        start|stop)
+                "$1";;
+        *)
+                echo "Usage: $0 {start|stop}"
+                exit 1
+esac
+

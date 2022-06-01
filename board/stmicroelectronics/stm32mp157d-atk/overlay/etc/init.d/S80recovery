@@ -1,0 +1,120 @@
+#!/bin/sh
+# This script implement follow functions:
+# 1. parse bootargs whether in recovery emmc images mode include divide emmc partitions only tf(mmc1) boot
+# 2. in recovery mode, call swupdate service to update emmc images
+# 3. start update led update sets heartbeat trigger mode than flash
+# 4. success update led update sets none trigger mode and bright
+# 5. fail update led update off and led err on
+
+DEBUG=true
+NOTICE=true
+WARN=true
+ERR=true
+
+debug() {
+        if [ $DEBUG ]; then
+		logger -t ${logger_tag} -p user.debug $@
+        fi
+}
+
+notice() {
+        if [ $NOTICE ]; then
+		logger -t ${logger_tag} -p user.notice $@
+        fi
+}
+
+warn() {
+        if [ $WARN ]; then
+		logger -t ${logger_tag} -p user.warn $@
+        fi
+}
+
+err() {
+        if [ $ERR ]; then
+		logger -t ${logger_tag} -p user.err $@
+        fi
+}
+
+# logger tag
+logger_tag=$0
+
+start() {
+	cat /proc/cmdline | grep "recovery=true"
+	if [ $? -eq 0 ]; then
+		notice "recovery=true ready to recovery emmc images"
+		if atk_emmc_partition; then
+			for i in `seq 3`; do
+				umount /dev/mmcblk2p*
+				sleep 2
+				if partprobe /dev/mmcblk2; then
+					sleep 2
+					notice "try ${i} time(s): ask kernel update emmc partitions success"
+					break
+				fi
+			done
+			notice "emmc partition success"
+			mount -t ext4 -o ro /dev/mmcblk2p9 /media
+			# update led as heartbeat
+			# error led not light
+			echo heartbeat > /sys/class/leds/update/trigger
+			echo 0 > /sys/class/leds/error/brightness
+			swupdate -v -i /media/atk_tf.swu
+			if [ $? -eq 0 ]; then
+				# update led none trigger but light
+				echo none > /sys/class/leds/update/trigger
+				echo 1 > /sys/class/leds/update/brightness
+				notice "swupdate emmc success"
+			else
+				# update not light and error light
+				echo none > /sys/class/leds/update/trigger
+				echo 0 > /sys/class/leds/update/brightness
+				echo 1 > /sys/class/leds/error/brightness	
+				err "swupdate emmc error code $?"
+			fi
+			umount /media
+		else
+			notice "emmc partition failed"
+		fi
+	else
+		notice "not in recovery mode,do nothing"
+	fi
+}
+
+atk_emmc_partition() {
+	sgdisk -Z -o /dev/mmcblk2
+        sgdisk -n 0:0:+5M \
+		-n 0:0:+128M \
+		-n 0:0:+128M \
+		-n 0:0:+64M \
+		-n 0:0:+60M \
+		-n 0:0:+40M \
+		-c 1:ssbl \
+		-c 2:rootfs \
+		-c 3:bootfs \
+		-c 4:vendorfs \
+		-c 5:userappfs \
+		-c 6:userdatafs \
+		-A 3:set:2 \
+		-p /dev/mmcblk2
+	return $?
+}
+
+stop() {
+	return 0
+}
+
+restart() {
+	return 0
+}
+
+case "$1" in
+        start|stop|restart)
+                "$1";;
+        reload)
+                # Restart, since there is no true "reload" feature.
+                restart;;
+        *)
+                echo "Usage: $0 {start|stop|restart|reload}"
+                exit 1
+esac
+
