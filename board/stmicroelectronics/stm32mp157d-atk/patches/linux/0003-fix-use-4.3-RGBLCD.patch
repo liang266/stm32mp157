@@ -1,0 +1,25 @@
+From e9363e868d326a1b2ae0e5513d160369b0a5267f Mon Sep 17 00:00:00 2001
+From: lianglulu <2042213396@qq.com>
+Date: Mon, 13 Jun 2022 17:55:16 +0800
+Subject: [PATCH] fix: use 4.3 RGBLCD
+
+---
+ arch/arm/boot/dts/stm32mp157d-atk.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/stm32mp157d-atk.dtsi b/arch/arm/boot/dts/stm32mp157d-atk.dtsi
+index 687fd07e3..239ba9492 100644
+--- a/arch/arm/boot/dts/stm32mp157d-atk.dtsi
++++ b/arch/arm/boot/dts/stm32mp157d-atk.dtsi
+@@ -96,7 +96,7 @@
+     };
+ 
+     lcd_id {
+-        select_id = <0>;
++        select_id = <4>;
+     };
+ 
+     leds {
+-- 
+2.17.1
+
