@@ -35,12 +35,15 @@ logger_tag=$0
 
 start() {
 	notice "prepare to fsck emmc partitions"	
-	for i in `/usr/bin/seq 2 3`; do
-		/sbin/fsck.ext4 -y /dev/mmcblk2p${i}
+	for i in `/usr/bin/seq 5 9`; do
+		/sbin/fsck.ext4 -y /dev/mmcblk1p${i}
 	done
 	sleep 1
 	notice "prepare to mount emmc partitions"	
-	/bin/mount -t ext4 -o ro /dev/mmcblk2p2 /boot
+	/bin/mount -t ext4 -o ro /dev/mmcblk1p5 /boot
+	/bin/mount -t ext4 -o ro /dev/mmcblk1p6 /stm32/vendor
+	/bin/mount -t ext4 -o ro /dev/mmcblk1p7 /stm32/userapp
+	/bin/mount -t ext4 -o ro /dev/mmcblk1p8 /stm32/userdata
 }
 
 stop() {
