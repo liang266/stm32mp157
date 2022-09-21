@@ -1,0 +1,23 @@
+#!/bin/sh
+
+
+start() {
+	codesys_path=/vendor/codesys/codesyscontrol.sh
+	if [ -x $codesys_path ]; then
+		logger -t rc.local -p user.debug "start $codesys_path"
+		$codesys_path &
+	else
+		logger -t rc.local -p user.err "can not find $codesys_path"
+	fi
+}
+
+case "$1" in
+	start)
+		"$1";;
+	restart)
+		;;
+	stop)
+		;;
+	*)
+		;;
+esac

@@ -1,0 +1,57 @@
+#!/bin/sh
+# remove mount partitions at /etc/inittab that may cause deploy image to emmc busy
+
+DEBUG=true
+NOTICE=true
+WARN=true
+ERR=true
+
+debug() {
+        if [ $DEBUG ]; then
+                logger -t ${logger_tag} -p user.debug $@
+        fi
+}
+
+notice() {
+        if [ $NOTICE ]; then
+                logger -t ${logger_tag} -p user.notice $@
+        fi
+}
+
+warn() {
+        if [ $WARN ]; then
+                logger -t ${logger_tag} -p user.warn $@
+        fi
+}
+
+err() {
+        if [ $ERR ]; then
+                logger -t ${logger_tag} -p user.err $@
+        fi
+}
+
+# logger tag
+logger_tag=$0
+
+start() {
+	notice "prepare to fsck emmc partitions"	
+	for i in `/usr/bin/seq 2 3`; do
+		/sbin/fsck.ext4 -y /dev/mmcblk2p${i}
+	done
+	sleep 1
+	notice "prepare to mount emmc partitions"	
+	/bin/mount -t ext4 -o ro /dev/mmcblk2p2 /boot
+}
+
+stop() {
+	/bin/umount /dev/mmcblk1p*
+}
+
+case "$1" in
+        start|stop|restart)
+                "$1";;
+        *)
+                echo "Usage: $0 {start|stop|restart|reload}"
+                exit 1
+esac
+

@@ -1,0 +1,48 @@
+#!/bin/sh
+# copy sw-versions to /etc/ directory
+
+DEBUG=true
+NOTICE=true
+WARN=true
+ERR=true
+
+debug() {
+        if [ $DEBUG ]; then
+                logger -t ${logger_tag} -p user.debug $@
+        fi
+}
+
+notice() {
+        if [ $NOTICE ]; then
+                logger -t ${logger_tag} -p user.notice $@
+        fi
+}
+
+warn() {
+        if [ $WARN ]; then
+                logger -t ${logger_tag} -p user.warn $@
+        fi
+}
+
+err() {
+        if [ $ERR ]; then
+                logger -t ${logger_tag} -p user.err $@
+        fi
+}
+
+start() {
+        # real time throttling feature
+        echo -1 > /proc/sys/kernel/sched_rt_runtime_us
+}
+
+# logger tag
+logger_tag=$0
+
+case "$1" in
+        start)
+                "$1";;
+        *)
+                echo "Usage: $0 {start}"
+                exit 1
+esac
+

@@ -1,0 +1,46 @@
+{
+	"images_path": "output/images",
+	"software_versions": "sw-versions",
+	"release_version": "issue",
+	"gz_compress": true,
+	"tgz_compress": true,
+
+	"enc": {
+		"passwd": "",
+		"salt": "6A4179C10F0C6476",
+		"encrypted": true
+	},
+
+	"images": [
+		{
+			"name": "atk_tf",
+			"swupdate": {
+				"path": "board/stmicroelectronics/stm32mp157d-atk/swupdate/tf"
+			}
+		},
+		{
+			"name": "atk_ota_system",
+			"swupdate": {
+				"path": "board/stmicroelectronics/stm32mp157d-atk/swupdate/system"
+			}
+		},
+		{
+			"name": "atk_ota_bootloader",
+			"swupdate": {
+				"path": "board/stmicroelectronics/stm32mp157d-atk/swupdate/bootloader"
+			}
+		},
+		{
+			"name": "atk_ota_factory",
+			"swupdate": {
+				"path": "board/stmicroelectronics/stm32mp157d-atk/swupdate/factory"
+			}
+		},
+		{
+			"name": "atk_ota_xml",
+			"swupdate": {
+				"path": "board/stmicroelectronics/stm32mp157d-atk/swupdate/xml"
+			}
+		}
+	]
+}

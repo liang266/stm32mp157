@@ -1,0 +1,25 @@
+software =
+{
+    version = "0.1.0";
+    description = "hcq0-1200d system update!!!";
+
+    images: (
+        {
+            name = "xml";
+            filename = "xml.bin";
+            progress-by-handler = true;
+            data = "1 2";
+            type = "xml";
+        },
+    );
+    scripts: (
+        {
+            filename = "hcfa-preins.sh";
+            type = "preinstall";
+        },
+        {
+            filename = "hcfa-postins.sh";
+            type = "postinstall";
+        }
+    );
+}

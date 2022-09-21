@@ -1,0 +1,73 @@
+
+    software = {
+        version = "0.1.0"; 
+        description = "atk tf update!!!"; 
+        hardware-compatibility = [
+            "base"
+        ]; 
+        images = (
+            {
+                name = "tf-a"; 
+                version = "34418359662132229805"; 
+                filename = "tf-a-stm32mp157d-atk.stm32"; 
+                device = "/dev/mmcblk1boot0"; 
+                type = "raw"; 
+            }, 
+            {
+                name = "tf-a"; 
+                version = "34418359662132229805"; 
+                filename = "tf-a-stm32mp157d-atk.stm32"; 
+                device = "/dev/mmcblk1boot1"; 
+                type = "raw"; 
+            }, 
+            {
+                name = "u-boot"; 
+                version = "34418359662132229805"; 
+                filename = "u-boot.stm32"; 
+                device = "/dev/mmcblk1p1"; 
+                type = "raw"; 
+            }, 
+            {
+                name = "rootfs"; 
+                version = "34418359662132229805"; 
+                filename = "rootfs.ext4.gz"; 
+                device = "/dev/mmcblk1p2"; 
+                compressed = true; 
+            }, 
+            {
+                name = "bootfs"; 
+                version = "34418359662132229805"; 
+                filename = "bootfs.ext4.gz"; 
+                device = "/dev/mmcblk1p3"; 
+                compressed = true; 
+            }, 
+            {
+                name = "vendor"; 
+                filename = "vendor.ext4.gz"; 
+                device = "/dev/mmcblk1p4"; 
+                compressed = true; 
+            }, 
+            {
+                name = "userapp"; 
+                filename = "userapp.ext4.gz"; 
+                device = "/dev/mmcblk1p5"; 
+                compressed = true; 
+            }, 
+            {
+                name = "userdata"; 
+                filename = "userdata.ext4.gz"; 
+                device = "/dev/mmcblk1p6"; 
+                compressed = true; 
+            }
+        ); 
+        scripts = (
+            {
+                filename = "hcfa-preins.sh"; 
+                type = "preinstall"; 
+            }, 
+            {
+                filename = "hcfa-postins.sh"; 
+                type = "postinstall"; 
+            }
+        ); 
+    }; 
