@@ -20,7 +20,7 @@
 #
 # Then run support/scripts/genimage.sh
 
-rootfs_mount_points="boot vendor root usr/local"
+rootfs_mount_points="boot stm32/vendor stm32/userapp stm32/userdata root usr/local"
 
 for point in ${rootfs_mount_points}; do
 	echo "points: ${TARGET_DIR}/${point}"
