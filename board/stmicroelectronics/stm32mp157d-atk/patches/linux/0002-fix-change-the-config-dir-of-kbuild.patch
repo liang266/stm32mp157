@@ -1,0 +1,27 @@
+From 5c4044eb92720ba4b9b56195569fb80d84306d37 Mon Sep 17 00:00:00 2001
+From: lianglulu <2042213396@qq.com>
+Date: Sat, 24 Sep 2022 18:26:18 +0800
+Subject: [PATCH] fix: change the config dir of kbuild
+
+- the pwd is current build dir
+- CURDIR is linux code dir
+---
+ drivers/gpu/drm/gcnano-driver-6.4.3/Kbuild | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/gcnano-driver-6.4.3/Kbuild b/drivers/gpu/drm/gcnano-driver-6.4.3/Kbuild
+index a2d64e66c..4218add6a 100644
+--- a/drivers/gpu/drm/gcnano-driver-6.4.3/Kbuild
++++ b/drivers/gpu/drm/gcnano-driver-6.4.3/Kbuild
+@@ -57,7 +57,7 @@
+ # Linux build file for kernel HAL driver.
+ #
+ 
+-include $(PWD)/drivers/gpu/drm/gcnano-driver-6.4.3/config
++include $(CURDIR)/drivers/gpu/drm/gcnano-driver-6.4.3/config
+ 
+ soc_vendor    := $(firstword $(subst -, ,$(SOC_PLATFORM)))
+ soc_board     := $(lastword  $(subst -, ,$(SOC_PLATFORM)))
+-- 
+2.25.1
+
